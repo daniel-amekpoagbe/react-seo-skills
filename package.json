@@ -1,6 +1,6 @@
 {
   "name": "react-seo-skills",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Agent skill installer for AI coding agents — SEO and AI-search visibility for Next.js and React with Vite. Covers metadata, Open Graph, Schema.org JSON-LD, sitemaps, robots.txt, keyword clustering, llms.txt, and rendering guidance.",
   "keywords": [
     "react-seo-skills",
