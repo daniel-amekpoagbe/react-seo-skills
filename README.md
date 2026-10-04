@@ -239,7 +239,7 @@ the updated `package.json`, and creates a matching `vX.Y.Z` Git tag. The tag
 release is then published to npm with provenance by the same release workflow.
 
 Before the first release, configure npm trusted publishing for this repository
-and the `Release` workflow (`.github/workflows/release.yml`). No npm token is
+and the `Publish to npm` workflow (`.github/workflows/publish.yml`). No npm token is
 stored in GitHub Actions.
 
 ---

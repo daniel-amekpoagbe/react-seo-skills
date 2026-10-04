@@ -2,30 +2,56 @@ name: Publish to npm
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
 
 permissions:
-  id-token: write # required for npm trusted publishing (OIDC)
-  contents: read
+  contents: write
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
-  publish:
+  release:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # No registry-url here on purpose: setup-node would write an
-      # _authToken line to .npmrc, which prevents npm from using OIDC.
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
 
-      - name: Ensure npm 11.5.1+ (required for trusted publishing)
-        run: npm install -g npm@latest
+      - name: Ensure current npm for trusted publishing
+        run: npm install --global npm@latest
 
       - name: Run tests
         run: npm test
 
-      - name: Publish with provenance
-        run: npm publish
+      - name: Bump patch version
+        id: version
+        run: |
+          npm version patch --no-git-tag-version
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version and create tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "chore(release): v${VERSION} [skip ci]"
+          git tag -a "v${VERSION}" -m "Release v${VERSION}"
+          git push origin HEAD:main --follow-tags
+
+      - name: Publish to npm with provenance
+        run: npm publish --provenance
