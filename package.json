@@ -1,7 +1,7 @@
 {
   "name": "react-seo-skills",
-  "version": "0.3.0",
-  "description": "Agent skill for Cursor, Claude Code, and Codex — SEO and AI-search visibility for Next.js, Astro, and Vite/React apps. Covers metadata, Open Graph, Schema.org JSON-LD, sitemaps, robots.txt, keyword clustering, llms.txt, and rendering guidance.",
+  "version": "0.6.0",
+  "description": "Agent skill installer for AI coding agents — SEO and AI-search visibility for Next.js and React with Vite. Covers metadata, Open Graph, Schema.org JSON-LD, sitemaps, robots.txt, keyword clustering, llms.txt, and rendering guidance.",
   "keywords": [
     "react-seo-skills",
     "agent-skill",
@@ -10,8 +10,8 @@
     "claude-code",
     "codex",
     "openai-codex",
+    "opencode",
     "nextjs",
-    "astro",
     "react",
     "vite",
     "react-router",
