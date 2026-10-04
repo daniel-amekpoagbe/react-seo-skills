@@ -1,18 +1,18 @@
 ---
 name: react-seo-skills
 description: >
-   Guides SEO and AI-search visibility for Next.js, Astro, and React apps in Cursor,
-  Claude Code, and Codex. Use when setting up metadata, Open Graph, Twitter cards,
+   Guides SEO and AI-search visibility for Next.js and React apps in Cursor,
+  Claude Code, Codex, and OpenCode. Use when setting up metadata, Open Graph, Twitter cards,
    Schema.org JSON-LD, sitemaps, robots.txt, optional llms.txt, keyword research,
   clustering, auditing SEO, improving discoverability, or setting up structured
-   data. Covers Next.js App Router, Pages Router, Astro, and Vite + React SPAs. Matches
+   data. Covers Next.js App Router, Next.js Pages Router, and Vite + React. Matches
   JavaScript or TypeScript to the project language.
 ---
 
 # React SEO Skills
 
-SEO and AI-search visibility for Next.js, Astro, and React applications. Works in Cursor,
-Claude Code, and Codex via native skill discovery.
+SEO and AI-search visibility for Next.js and React (including Vite) applications. Works in Cursor,
+Claude Code, Codex, and OpenCode via native skill discovery.
 
 <!-- BEGIN:react-seo-skills -->
 
@@ -41,11 +41,10 @@ Claude Code, and Codex via native skill discovery.
 1. **Detect language before anything else.** JavaScript project → write `.js`/`.jsx`
    with no types. TypeScript project → write `.ts`/`.tsx` with types. See
    [language.md](references/language.md).
-2. **Detect the stack before writing code.** Never apply Next.js APIs to an Astro
-   or Vite project, Astro patterns to Next.js or Vite, or Vite patterns to a
-   Next.js or Astro project.
+2. **Detect the stack before writing code.** Support Next.js App Router,
+   Next.js Pages Router, and Vite + React. Only these stacks are in scope.
 3. **Verify framework versions before writing code.** Check `package.json` for
-   the installed versions of `next`, `react`, `vite`, and `react-helmet-async`.
+   the installed versions of `next`, `react`, `vite`, and `react-helmet-async` if present.
    If a version is newer than your training data, consult its official docs
    before implementing — APIs and conventions change between major versions.
 4. **Ask for real project details — never guess or invent them.** Before writing
@@ -83,27 +82,21 @@ Claude Code, and Codex via native skill discovery.
 
 Always run in this sequence:
 
-| Step | Check                                                | Reference                             |
-| ---- | ---------------------------------------------------- | ------------------------------------- |
-| 1    | **Language** — JS or TS?                             | [language.md](references/language.md) |
-| 2    | **Stack** — Next.js App/Pages, Astro, or Vite/React? | Table below                           |
-| 3    | **Implementation**                                   | Stack reference file                  |
+| Step | Check                                        | Reference                             |
+| ---- | -------------------------------------------- | ------------------------------------- |
+| 1    | **Language** — JS or TS?                     | [language.md](references/language.md) |
+| 2    | **Stack** — Next.js App/Pages or Vite/React? | Table below                           |
+| 3    | **Implementation**                           | Stack reference file                  |
 
 ### Stack Detection
 
-| Signal                                                              | Stack                   | Reference                                     |
-| ------------------------------------------------------------------- | ----------------------- | --------------------------------------------- |
-| `app/layout.tsx` or `app/layout.jsx`                                | Next.js App Router      | [app-router.md](references/app-router.md)     |
-| `pages/_app.tsx` or `pages/_app.jsx`                                | Next.js Pages Router    | [pages-router.md](references/pages-router.md) |
-| `astro.config.*`, `src/pages/*.astro`, or `astro` in `package.json` | Astro                   | [astro.md](references/astro.md)               |
-| `vite.config.ts` or `vite.config.js`                                | Vite + React            | [react-vite.md](references/react-vite.md)     |
-| `react-scripts` in `package.json` dependencies                      | CRA (treat as Vite SPA) | [react-vite.md](references/react-vite.md)     |
+| Signal                               | Stack                | Reference                                     |
+| ------------------------------------ | -------------------- | --------------------------------------------- |
+| `app/layout.tsx` or `app/layout.jsx` | Next.js App Router   | [app-router.md](references/app-router.md)     |
+| `pages/_app.tsx` or `pages/_app.jsx` | Next.js Pages Router | [pages-router.md](references/pages-router.md) |
+| `vite.config.ts` or `vite.config.js` | Vite + React         | —                                             |
 
 If both `app/` and `pages/` exist, App Router takes precedence in Next.js 13+.
-
-> **Planned (not yet supported):** TanStack Start (`0.4.0`). If a project uses
-> it, apply the closest matching general principles, tell the developer dedicated
-> support is coming, and do not invent framework-specific APIs.
 
 ---
 
@@ -140,14 +133,14 @@ Adapt all code to the detected language before implementing.
 
 ## Stack Quick Reference
 
-| Feature       | App Router                      | Pages Router                | Astro                           | Vite + React                         |
-| ------------- | ------------------------------- | --------------------------- | ------------------------------- | ------------------------------------ |
-| Metadata API  | `metadata` / `generateMetadata` | `next/head`                 | HTML in `.astro` layouts/pages  | React 19 JSX or `react-helmet-async` |
-| Sitemap       | `app/sitemap.ts` or `.js`       | API route or `next-sitemap` | `@astrojs/sitemap`              | `public/sitemap.xml` or build script |
-| Robots        | `app/robots.ts` or `.js`        | `public/robots.txt`         | `public/robots.txt` or endpoint | `public/robots.txt`                  |
-| JSON-LD       | Page `<script>`                 | Page `<script>`             | Page/layout `<script>`          | Page `<script>` or `SEO` component   |
-| File ext (TS) | `.tsx`, `.ts`                   | `.tsx`, `.ts`               | `.astro`, `.ts`                 | `.tsx`, `.ts`                        |
-| File ext (JS) | `.jsx`, `.js`                   | `.jsx`, `.js`               | `.astro`, `.js`                 | `.jsx`, `.js`                        |
+| Feature       | App Router                      | Pages Router                | Vite + React                         |
+| ------------- | ------------------------------- | --------------------------- | ------------------------------------ |
+| Metadata API  | `metadata` / `generateMetadata` | `next/head`                 | React 19 JSX or `react-helmet-async` |
+| Sitemap       | `app/sitemap.ts` or `.js`       | API route or `next-sitemap` | `public/sitemap.xml` or build script |
+| Robots        | `app/robots.ts` or `.js`        | `public/robots.txt`         | `public/robots.txt`                  |
+| JSON-LD       | Page `<script>`                 | Page `<script>`             | Page `<script>` or `SEO` component   |
+| File ext (TS) | `.tsx`, `.ts`                   | `.tsx`, `.ts`               | `.tsx`, `.ts`                        |
+| File ext (JS) | `.jsx`, `.js`                   | `.jsx`, `.js`               | `.jsx`, `.js`                        |
 
 ---
 

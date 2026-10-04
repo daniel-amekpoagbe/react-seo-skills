@@ -113,10 +113,9 @@ export default function AboutPage() {
 }
 ```
 
-### Vite + React
+### React (Vite/SPA)
 
-If the project uses Helmet, install `react-helmet-async` first (see
-[react-helmet-async.md](react-helmet-async.md)). Pass JSON-LD through `<Helmet>`
+If the project uses Helmet, install `react-helmet-async` first. Pass JSON-LD through `<Helmet>`
 or the `SEO` component:
 
 ```tsx
@@ -143,7 +142,7 @@ export default function AboutPage() {
 }
 ```
 
-See [react-vite.md](react-vite.md) for the full `SEO` component pattern.
+See the Vite + React implementation guidance for the full `SEO` component pattern.
 
 ---
 
