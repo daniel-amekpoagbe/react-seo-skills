@@ -1,8 +1,8 @@
 # Contributing to react-seo-skills
 
 Thanks for your interest in improving `react-seo-skills`. This project is an
-**agent skill** — a set of Markdown files that teach AI coding agents (Cursor,
-Claude Code, Codex) how to implement SEO and GEO in Next.js and React apps —
+**agent skill** — a set of Markdown files that teach AI coding agents how to
+implement SEO and GEO in Next.js and React with Vite apps —
 plus a small zero-dependency installer.
 
 Contributions of all kinds are welcome: content corrections, new stack support,
@@ -35,7 +35,7 @@ npm test          # runs the installer test suite (Node 18+, no deps)
 To try the installer against a throwaway directory:
 
 ```bash
-node bin/install.js --cursor   # installs into ./.cursor/skills/react-seo-skills
+node bin/install.js             # auto-detects the agent or uses ./.agents/skills
 ```
 
 ---
@@ -62,8 +62,8 @@ The skill is read by AI agents, so accuracy and consistency matter more than pro
 
 ## Adding support for a new stack
 
-New framework support (e.g. Astro, Remix, TanStack Start) is the most valuable
-contribution. Follow this checklist:
+New framework support outside Next.js and Vite/React is currently out of scope.
+For changes within the supported stacks, follow this checklist:
 
 1. **Create the reference file** `skill/references/<stack>.md` modeled on an
    existing one (`app-router.md` is a good template). Cover, at minimum:
@@ -81,15 +81,14 @@ contribution. Follow this checklist:
 5. **Add a `CHANGELOG.md` entry** under `## [Unreleased]`.
 6. **Run `npm test`** and the link checker.
 
-> Upcoming stacks (Astro, TanStack Start) are tracked in the
-> [roadmap](CHANGELOG.md). If you want to take one on, open an issue first so we
-> don't duplicate work.
+> Keep proposed changes aligned with the supported Next.js and Vite/React stacks.
+> Open an issue first for larger changes so we do not duplicate work.
 
 ---
 
 ## Pull request process
 
-1. Fork and create a branch: `git checkout -b feat/astro-support`.
+1. Fork and create a branch: `git checkout -b feat/seo-guidance`.
 2. Make your change and run `npm test`.
 3. Add a `CHANGELOG.md` entry under `## [Unreleased]`.
 4. Open a PR using the template. Describe what you verified and against which
