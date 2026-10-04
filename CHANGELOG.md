@@ -9,10 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2026-09-08
 
-### Added
 
-- Astro support for shared layout metadata, static and on-demand rendering,
-  content collections, `@astrojs/sitemap`, robots files, and JSON-LD.
 
 ### Updated
 
