@@ -37,7 +37,8 @@ jobs:
         id: version
         run: |
           npm version patch --no-git-tag-version
-          echo "version=$(node -p \"require('./package.json').version\")" >> "$GITHUB_OUTPUT"
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Commit version and create tag
         env:
