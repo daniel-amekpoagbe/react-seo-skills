@@ -2,8 +2,8 @@
 
 Applies to Next.js with the `pages/` directory (all versions).
 
-**Do not use this file for Vite or plain React apps.** Use
-[react-vite.md](react-vite.md) instead.
+**Do not use this file for Vite or plain React apps.** Handle React metadata
+according to the rendering strategy of that project.
 
 ---
 

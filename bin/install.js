@@ -82,6 +82,11 @@ function renderTarget(result, scope, cwd, dryRun) {
 }
 
 const TARGETS = {
+  agents: {
+    label: "Agents",
+    project: path.join(".agents", "skills"),
+    global: path.join(os.homedir(), ".agents", "skills"),
+  },
   cursor: {
     label: "Cursor",
     project: path.join(".cursor", "skills"),
@@ -97,7 +102,28 @@ const TARGETS = {
     project: path.join(".agents", "skills"),
     global: path.join(os.homedir(), ".codex", "skills"),
   },
+  opencode: {
+    label: "OpenCode",
+    project: path.join(".opencode", "skills"),
+    global: path.join(os.homedir(), ".config", "opencode", "skills"),
+  },
 };
+
+function detectAgent(cwd) {
+  // Check for common agent config directories/presence
+  if (fs.existsSync(path.join(cwd, ".cursor"))) return "cursor";
+  if (fs.existsSync(path.join(cwd, ".claude"))) return "claude";
+  if (fs.existsSync(path.join(cwd, ".opencode"))) return "opencode";
+  if (fs.existsSync(path.join(cwd, ".agents"))) return "agents";
+  if (fs.existsSync(path.join(cwd, ".codex"))) return "codex";
+  // Check environment hints when no project directory identifies an agent.
+  if (process.env.CLAUDE_CODE_SESSION || process.env.CLAUDE_CONFIG_DIR)
+    return "claude";
+  if (process.env.CURSOR_ENV || process.env.CURSOR_AGENT) return "cursor";
+  if (process.env.CODEX_HOME) return "codex";
+  if (process.env.OPENCODE_CONFIG_DIR) return "opencode";
+  return null;
+}
 
 function printHelp() {
   const opt = (flag, desc) => `  ${c.cyan(pad(flag, 11))} ${c.dim(desc)}`;
@@ -105,17 +131,13 @@ function printHelp() {
   console.log(
     [
       "",
-      `${c.bold("react-seo-skills")} ${c.dim("— SEO and AI-search skills for Cursor, Claude Code & Codex")}`,
+      `${c.bold("react-seo-skills")} ${c.dim("— SEO and AI-search skills for AI coding agents")}`,
       "",
       c.bold("Usage:"),
       `  ${c.dim("$")} npx react-seo-skills [options]`,
       "",
       c.bold("Options:"),
-      opt("--all", "Install for all agents (default)"),
-      opt("--cursor", "Install for Cursor only"),
-      opt("--claude", "Install for Claude Code only"),
-      opt("--codex", "Install for Codex only"),
-      opt("--global", "Install to user-level skill dirs (~/.cursor, …)"),
+      opt("--global", "Install to user-level skill dirs"),
       opt("--force", "Overwrite an existing installation"),
       opt("--dry-run", "Preview without writing any files"),
       opt("--help", "Show this help message"),
@@ -123,8 +145,7 @@ function printHelp() {
       c.bold("Examples:"),
       ex("npx react-seo-skills"),
       ex("npx react-seo-skills --global"),
-      ex("npx react-seo-skills --cursor --claude"),
-      ex("npx react-seo-skills --codex --force"),
+      ex("npx react-seo-skills --force"),
       "",
     ].join("\n"),
   );
@@ -156,29 +177,19 @@ function parseArgs(argv) {
       options.dryRun = true;
       continue;
     }
-    if (arg === "--all") {
-      options.agents = new Set(Object.keys(TARGETS));
-      continue;
-    }
-    if (arg === "--cursor") {
-      options.agents.add("cursor");
-      continue;
-    }
-    if (arg === "--claude") {
-      options.agents.add("claude");
-      continue;
-    }
-    if (arg === "--codex") {
-      options.agents.add("codex");
-      continue;
-    }
     console.error(`Unknown option: ${arg}`);
     printHelp();
     process.exit(1);
   }
 
   if (options.agents.size === 0) {
-    options.agents = new Set(Object.keys(TARGETS));
+    const detected = detectAgent(process.cwd());
+    if (detected && TARGETS[detected]) {
+      options.agents = new Set([detected]);
+    } else {
+      // Use the shared project-level agents directory when no agent is detected.
+      options.agents = new Set(["agents"]);
+    }
   }
 
   return options;
@@ -294,11 +305,9 @@ function main() {
       ["SKILL.md", "Entry point & audit workflow"],
       ["references/language.md", "JavaScript / TypeScript detection"],
       ["references/keywords.md", "Keyword clustering & validation"],
-      ["references/astro.md", "Astro metadata & sitemap"],
       ["references/app-router.md", "Next.js App Router"],
       ["references/pages-router.md", "Next.js Pages Router"],
       ["references/react-vite.md", "Vite + React / SPA"],
-      ["references/react-helmet-async.md", "Helmet installation & API"],
       ["references/structured-data.md", "Schema.org JSON-LD"],
       ["references/geo.md", "AI visibility & GEO"],
       ["references/validation.md", "Post-implementation checks"],
@@ -319,11 +328,17 @@ function main() {
   if (options.agents.has("cursor")) {
     steps.push("✓ Cursor automatically discovers SKILL.md");
   }
+  if (options.agents.has("agents")) {
+    steps.push("✓ Shared agents directory contains SKILL.md");
+  }
   if (options.agents.has("claude")) {
     steps.push("✓ Claude Code automatically discovers .claude/skills");
   }
   if (options.agents.has("codex")) {
     steps.push("✓ Restart Codex so it rescans .agents/skills");
+  }
+  if (options.agents.has("opencode")) {
+    steps.push("✓ OpenCode will pick up .opencode/skills");
   }
 
   console.log();
@@ -331,9 +346,7 @@ function main() {
   for (const step of steps) {
     console.log(`    ${c.dim(step)}`);
   }
-  console.log(
-    `    ${c.cyan("→")} ${c.dim("See README for other agent configurations")}`,
-  );
+
   console.log();
   console.log(`  ${c.dim(horizontalLine("─", 50))}`);
   console.log();
