@@ -32,7 +32,6 @@ npx react-seo-skills
 - [CLI reference](#cli-reference)
 - [Where it installs](#where-it-installs)
 - [Updating](#updating)
-- [Release automation](#release-automation)
 - [What the agent learns](#what-the-agent-learns)
 - [Supported stacks](#supported-stacks)
 - [Example prompts](#example-prompts)
@@ -224,25 +223,9 @@ skill/
     └── validation.md              Post-implementation checklist
 ```
 
-## agent loads only when they are relevant to the task.
-
 ## Requirements
 
 - **Node.js 18 or newer** to run the installer
-
----
-
-## Release automation
-
-Every push to `main` runs the test suite, increments the patch version, commits
-the updated `package.json`, and creates a matching `vX.Y.Z` Git tag. The tag
-release is then published to npm with provenance by the same release workflow.
-
-Before the first release, configure npm trusted publishing for this repository
-and the `Publish to npm` workflow (`.github/workflows/publish.yml`). No npm token is
-stored in GitHub Actions.
-
----
 
 ## Contributing
 
